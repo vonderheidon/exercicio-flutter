@@ -1,3 +1,6 @@
+import 'package:atividade/components/password_field_component.dart';
+import 'package:atividade/components/text_field_component.dart';
+import 'package:atividade/validators/form_field_validators.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Exercício',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -30,54 +33,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool offPass = true;
-
-  _showPassword() {
-    setState(() {
-      offPass = !offPass;
-    });
-  }
-
-  Widget _buildEmailField() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: TextField(
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Color(0xFFFFFFFF),
-          labelText: 'Digite seu email',
-          labelStyle: TextStyle(color: Color(0xFFB4B4B4)),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFFB4B4B4), width: 2),
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPasswordField() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: TextField(
-        obscureText: offPass,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Color(0xFFFFFFFF),
-          suffixIcon: IconButton(
-            onPressed: _showPassword,
-            icon: Icon(offPass ? Icons.visibility_off : Icons.visibility),
-          ),
-          labelText: 'Digite sua senha',
-          labelStyle: TextStyle(color: Color(0xFFB4B4B4)),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFFB4B4B4), width: 2),
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-      ),
-    );
-  }
+  final _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
 
   Widget _buildElevatedButton(String text, Color BGcolor, Color textColor) {
     return Padding(
@@ -138,9 +95,15 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               _buildAvatarImage(),
               SizedBox(height: 40),
-              _buildEmailField(),
+              TextFieldComponent(
+                labelText: 'Digite seu email',
+                controller: _emailController,
+              ),
               SizedBox(height: 20),
-              _buildPasswordField(),
+              PasswordFieldComponent(
+                labelText: 'Digite sua senha',
+                controller: _passwordController,
+              ),
               SizedBox(height: 30),
               _buildElevatedButton('Entrar', Color(0xFF93C5FF), Colors.white),
               SizedBox(height: 20),
