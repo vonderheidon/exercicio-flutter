@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 class TextFieldComponent extends StatelessWidget {
   final String labelText;
   final Icon? prefixIcon;
+  final String? errorText;
   final TextEditingController? controller;
 
   const TextFieldComponent({
     super.key,
     required this.labelText,
     this.prefixIcon,
+    this.errorText,
     this.controller,
   });
 
@@ -20,6 +22,7 @@ class TextFieldComponent extends StatelessWidget {
         controller: controller,
         decoration: InputDecoration(
           prefixIcon: prefixIcon,
+          errorText: errorText,
           filled: true,
           fillColor: Color(0xFFFFFFFF),
           labelText: labelText,

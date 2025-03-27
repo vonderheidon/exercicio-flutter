@@ -12,7 +12,7 @@ class TextFieldValidators {
   }
 
   bool isValidEmail(String email) {
-    if (!email.contains('@') && !email.contains('.')) {
+    if (!email.contains('@') || !email.contains('.')) {
       return false;
     }
     return true;

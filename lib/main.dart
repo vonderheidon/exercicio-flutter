@@ -39,7 +39,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
-  final _userDataBase = UserDatabase();
+
+  String? _emailError;
+  String? _passwordError;
 
   Widget _buildAvatarImage() {
     return CircleAvatar(
@@ -48,25 +50,55 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _loginErrorDialog() {
-    return AlertDialog(
-      title: Text('Falha de login'),
-      content: Text('Email e/ou senha incorretos. Tente novamente.'),
-      actions: <Widget>[
-        TextButton(
-          child: Text('OK'),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
+  void _showDialog(String title, String content) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
+  }
+
+  void _validateLogin() {
+    setState(() {
+      _emailError = null;
+      _passwordError = null;
+
+      if (_emailController.text.isEmpty) {
+        _emailError = 'Este campo deve ser preenchido';
+      }
+      if (_passwordController.text.isEmpty) {
+        _passwordError = 'Este campo deve ser preenchido';
+      }
+      if (_emailError == null && _passwordError == null) {
+        if (UserDatabase.validateUser(
+          _emailController.text,
+          _passwordController.text,
+        )) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+          );
+        } else {
+          _showDialog('Falha no login', 'Email e/ou Senha incorretos. Tente novamente');
+        }
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    _userDataBase.addUser('teste', '12345678910', '(83)99988-7766', 'teste');
-
     return SafeArea(
       child: Scaffold(
         backgroundColor: Color(0xFFF8F8F8),
@@ -93,41 +125,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 TextFieldComponent(
                   labelText: 'Digite seu email',
                   controller: _emailController,
+                  errorText: _emailError,
                 ),
                 SizedBox(height: 20),
                 PasswordFieldComponent(
                   labelText: 'Digite sua senha',
                   controller: _passwordController,
+                  errorText: _passwordError,
                 ),
                 SizedBox(height: 30),
                 ElevatedButtonComponent(
                   text: 'Entrar',
                   bgcolor: Color(0xFF93C5FF),
                   textColor: Colors.white,
-                  onPressed:
-                      () => {
-                        if (_userDataBase.validateUser(
-                          _emailController.text,
-                          _passwordController.text,
-                        ))
-                          {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HomePage(),
-                              ),
-                            ),
-                          }
-                        else
-                          {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return _loginErrorDialog();
-                              },
-                            ),
-                          },
-                      },
+                  onPressed: () => _validateLogin(),
                 ),
                 SizedBox(height: 20),
                 Text(

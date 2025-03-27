@@ -1,13 +1,13 @@
 import 'package:atividade/models/user.model.dart';
 
-class UserDatabase {
-  final List<User> _users = [];
+abstract class UserDatabase {
+  static final List<User> _users = [User('teste', '12345678910', '(83)99485-3399', 'teste')];
 
-  void addUser(String email, String cpf, String phone, String password) {
+  static void addUser(String email, String cpf, String phone, String password) {
     _users.add(User(email, cpf, phone, password));
   }
 
-  User? getUserByEmail(String email) {
+  static User? getUserByEmail(String email) {
     for (User user in _users) {
       if (user.email == email) {
         return user;
@@ -16,7 +16,7 @@ class UserDatabase {
     return null;
   }
 
-  bool containsEmail(String email) {
+  static bool containsEmail(String email) {
     for (User user in _users) {
       if (user.email == email) {
         return true;
@@ -25,7 +25,7 @@ class UserDatabase {
     return false;
   }
 
-  bool validateUser(String email, String password) {
+  static bool validateUser(String email, String password) {
     if (containsEmail(email)) {
       User? user = getUserByEmail(email);
       if (user != null && user.password == password) {

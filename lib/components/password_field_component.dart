@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 
 class PasswordFieldComponent extends StatefulWidget {
   final String labelText;
-  final TextEditingController controller;
   final Icon? prefixIcon;
+  final String? errorText;
+  final TextEditingController controller;
 
   const PasswordFieldComponent({
     super.key,
     required this.labelText,
-    required this.controller,
     this.prefixIcon,
+    this.errorText,
+    required this.controller,
   });
 
   @override
@@ -33,8 +35,9 @@ class _PasswordFieldState extends State<PasswordFieldComponent> {
         obscureText: _visibilityPassword,
         controller: widget.controller,
         decoration: InputDecoration(
-          prefixIcon: widget.prefixIcon,
           labelText: widget.labelText,
+          prefixIcon: widget.prefixIcon,
+          errorText: widget.errorText,
           labelStyle: TextStyle(color: Color(0xFFB4B4B4)),
           filled: true,
           fillColor: Color(0xFFFFFFFF),

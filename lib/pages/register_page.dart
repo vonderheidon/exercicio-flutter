@@ -19,7 +19,12 @@ class _RegisterPageState extends State<RegisterPage> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _validator = TextFieldValidators();
-  final _userDataBase = UserDatabase();
+
+  String? _emailError;
+  String? _cpfError;
+  String? _phoneError;
+  String? _passwordError;
+  String? _confirmPasswordError;
 
   void _showDialog(String title, String content) {
     showDialog(
@@ -50,27 +55,35 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void validateFields() {
-    if (!_validator.isValidEmail(_emailController.text)) {
-      _showDialog('Formato inválido', 'Digite um email válido');
-    } else if (!_validator.isValidCPF(_cpfController.text)) {
-      _showDialog('Formato inválido', 'O CPF deve conter apenas números');
-    } else if (_phoneController.text.isEmpty) {
-      _showDialog('Erro', 'Preencha o campo de telefone');
-    } else if (!_validator.isValidPassword(_passwordController.text)) {
-      _showDialog('Erro', 'A senha deve ter no mínimo 8 caracteres');
-    } else if (_passwordController.text != _confirmPasswordController.text) {
-      _showDialog('Erro', 'As senhas digitadas não coincidem');
-    } else {
-      _userDataBase.addUser(
-        _emailController.text,
-        _cpfController.text,
-        _phoneController.text,
-        _passwordController.text,
-      );
+    setState(() {
+      _emailError = null;
+      _cpfError = null;
+      _phoneError = null;
+      _passwordError = null;
+      _confirmPasswordError = null;
 
-      _showDialog('Sucesso', 'Conta cadastrada com sucesso');
-      _clearFields();
-    }
+      if (!_validator.isValidEmail(_emailController.text)) {
+        _emailError = 'Digite um email válido';
+      } else if (!_validator.isValidCPF(_cpfController.text)) {
+        _cpfError = 'O CPF deve conter apenas números';
+      } else if (_phoneController.text.isEmpty) {
+        _phoneError = 'Preencha o campo de telefone';
+      } else if (!_validator.isValidPassword(_passwordController.text)) {
+        _passwordError = 'A senha deve ter no mínimo 8 caracteres';
+      } else if (_passwordController.text != _confirmPasswordController.text) {
+        _confirmPasswordError = 'As senhas digitadas não coincidem';
+      } else {
+        UserDatabase.addUser(
+          _emailController.text,
+          _cpfController.text,
+          _phoneController.text,
+          _passwordController.text,
+        );
+
+        _showDialog('Sucesso', 'Conta cadastrada com sucesso');
+        _clearFields();
+      }
+    });
   }
 
   @override
@@ -97,30 +110,35 @@ class _RegisterPageState extends State<RegisterPage> {
                 labelText: 'Digite seu email',
                 prefixIcon: Icon(Icons.alternate_email),
                 controller: _emailController,
+                errorText: _emailError,
               ),
               SizedBox(height: 20),
               TextFieldComponent(
                 labelText: 'Digite seu cpf',
                 prefixIcon: Icon(Icons.badge),
                 controller: _cpfController,
+                errorText: _cpfError,
               ),
               SizedBox(height: 20),
               TextFieldComponent(
                 labelText: 'Digite seu telefone',
                 prefixIcon: Icon(Icons.call),
                 controller: _phoneController,
+                errorText: _phoneError,
               ),
               SizedBox(height: 20),
               PasswordFieldComponent(
                 labelText: 'Digite sua senha',
                 prefixIcon: Icon(Icons.password),
                 controller: _passwordController,
+                errorText: _passwordError,
               ),
               SizedBox(height: 20),
               PasswordFieldComponent(
                 labelText: 'Confirme sua senha',
                 prefixIcon: Icon(Icons.password),
                 controller: _confirmPasswordController,
+                errorText: _confirmPasswordError,
               ),
               SizedBox(height: 20),
               ElevatedButtonComponent(
