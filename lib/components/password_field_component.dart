@@ -4,14 +4,12 @@ class PasswordFieldComponent extends StatefulWidget {
   final String labelText;
   final TextEditingController controller;
   final Icon? prefixIcon;
-  final String? Function(String?)? validator;
 
   const PasswordFieldComponent({
     super.key,
     required this.labelText,
     required this.controller,
     this.prefixIcon,
-    this.validator,
   });
 
   @override
@@ -34,7 +32,6 @@ class _PasswordFieldState extends State<PasswordFieldComponent> {
       child: TextFormField(
         obscureText: _visibilityPassword,
         controller: widget.controller,
-        validator: widget.validator,
         decoration: InputDecoration(
           prefixIcon: widget.prefixIcon,
           labelText: widget.labelText,

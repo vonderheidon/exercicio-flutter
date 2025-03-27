@@ -1,4 +1,4 @@
-class FormFieldValidators {
+class TextFieldValidators {
   bool isValidCPF(String cpf) {
     if (cpf.length != 11) {
       return false;

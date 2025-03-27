@@ -1,6 +1,10 @@
 import 'package:atividade/components/elevated_button_component.dart';
 import 'package:atividade/components/password_field_component.dart';
 import 'package:atividade/components/text_field_component.dart';
+import 'package:atividade/database/user_database.dart';
+import 'package:atividade/pages/home_page.dart';
+import 'package:atividade/pages/recover_page.dart';
+import 'package:atividade/pages/register_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -35,6 +39,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
+  final _userDataBase = UserDatabase();
 
   Widget _buildAvatarImage() {
     return CircleAvatar(
@@ -60,6 +65,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    _userDataBase.addUser('teste', '12345678910', '(83)99988-7766', 'teste');
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Color(0xFFF8F8F8),
@@ -99,12 +106,27 @@ class _MyHomePageState extends State<MyHomePage> {
                   textColor: Colors.white,
                   onPressed:
                       () => {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return _loginErrorDialog();
+                        if (_userDataBase.validateUser(
+                          _emailController.text,
+                          _passwordController.text,
+                        ))
+                          {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomePage(),
+                              ),
+                            ),
+                          }
+                        else
+                          {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return _loginErrorDialog();
+                              },
+                            ),
                           },
-                        ),
                       },
                 ),
                 SizedBox(height: 20),
@@ -121,14 +143,30 @@ class _MyHomePageState extends State<MyHomePage> {
                   text: 'Criar uma nova conta',
                   bgcolor: Color(0xFFFF7D7D),
                   textColor: Colors.white,
-                  onPressed: () => {},
+                  onPressed:
+                      () => {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RegisterPage(),
+                          ),
+                        ),
+                      },
                 ),
                 SizedBox(height: 20),
                 ElevatedButtonComponent(
                   text: 'Recuperar conta',
                   bgcolor: Color(0xFFFFC081),
                   textColor: Color(0xFF666666),
-                  onPressed: () => {},
+                  onPressed:
+                      () => {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RecoverPage(),
+                          ),
+                        ),
+                      },
                 ),
               ],
             ),

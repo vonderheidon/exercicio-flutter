@@ -4,23 +4,20 @@ class TextFieldComponent extends StatelessWidget {
   final String labelText;
   final Icon? prefixIcon;
   final TextEditingController? controller;
-  final String? Function(String?)? validator;
 
   const TextFieldComponent({
     super.key,
     required this.labelText,
     this.prefixIcon,
     this.controller,
-    this.validator,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
-      child: TextFormField(
+      child: TextField(
         controller: controller,
-        validator: validator,
         decoration: InputDecoration(
           prefixIcon: prefixIcon,
           filled: true,
