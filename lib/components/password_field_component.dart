@@ -39,6 +39,8 @@ class _PasswordFieldState extends State<PasswordFieldComponent> {
           prefixIcon: widget.prefixIcon,
           labelText: widget.labelText,
           labelStyle: TextStyle(color: Color(0xFFB4B4B4)),
+          filled: true,
+          fillColor: Color(0xFFFFFFFF),
           suffixIcon: IconButton(
             onPressed: _toggleVisibilityPassword,
             icon: Icon(

@@ -16,6 +16,30 @@ class ElevatedButtonComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Placeholder();
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: onPressed,
+          style: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(bgcolor),
+            fixedSize: WidgetStatePropertyAll(Size(350, 58)),
+            shape: WidgetStatePropertyAll(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            ),
+          ), 
+          child: Text(
+            text,
+            style: TextStyle(
+              fontFamily: 'Inter',
+              color: textColor,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          )
+        ),
+      ),
+    );
   }
 }

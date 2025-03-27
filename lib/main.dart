@@ -1,6 +1,6 @@
+import 'package:atividade/components/elevated_button_component.dart';
 import 'package:atividade/components/password_field_component.dart';
 import 'package:atividade/components/text_field_component.dart';
-import 'package:atividade/validators/form_field_validators.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -36,38 +36,25 @@ class _MyHomePageState extends State<MyHomePage> {
   final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
 
-  Widget _buildElevatedButton(String text, Color BGcolor, Color textColor) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(BGcolor),
-            fixedSize: WidgetStatePropertyAll(Size(350, 58)),
-            shape: WidgetStatePropertyAll(
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            ),
-          ),
-          onPressed: null,
-          child: Text(
-            style: TextStyle(
-              fontFamily: 'Inter',
-              color: textColor,
-              fontSize: 16,
-              fontWeight: FontWeight.w900,
-            ),
-            text,
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildAvatarImage() {
     return CircleAvatar(
       radius: 75,
       backgroundImage: AssetImage('assets/avatar.png'),
+    );
+  }
+
+  Widget _loginErrorDialog() {
+    return AlertDialog(
+      title: Text('Falha de login'),
+      content: Text('Email e/ou senha incorretos. Tente novamente.'),
+      actions: <Widget>[
+        TextButton(
+          child: Text('OK'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
     );
   }
 
@@ -90,44 +77,61 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildAvatarImage(),
-              SizedBox(height: 40),
-              TextFieldComponent(
-                labelText: 'Digite seu email',
-                controller: _emailController,
-              ),
-              SizedBox(height: 20),
-              PasswordFieldComponent(
-                labelText: 'Digite sua senha',
-                controller: _passwordController,
-              ),
-              SizedBox(height: 30),
-              _buildElevatedButton('Entrar', Color(0xFF93C5FF), Colors.white),
-              SizedBox(height: 20),
-              Text(
-                'Ou',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildAvatarImage(),
+                SizedBox(height: 40),
+                TextFieldComponent(
+                  labelText: 'Digite seu email',
+                  controller: _emailController,
                 ),
-              ),
-              SizedBox(height: 20),
-              _buildElevatedButton(
-                'Criar uma nova conta',
-                Color(0xFFFF7D7D),
-                Colors.white,
-              ),
-              SizedBox(height: 20),
-              _buildElevatedButton(
-                'Recuperar conta',
-                Color(0xFFFFC081),
-                Color(0xFF666666),
-              ),
-            ],
+                SizedBox(height: 20),
+                PasswordFieldComponent(
+                  labelText: 'Digite sua senha',
+                  controller: _passwordController,
+                ),
+                SizedBox(height: 30),
+                ElevatedButtonComponent(
+                  text: 'Entrar',
+                  bgcolor: Color(0xFF93C5FF),
+                  textColor: Colors.white,
+                  onPressed:
+                      () => {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return _loginErrorDialog();
+                          },
+                        ),
+                      },
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Ou',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                SizedBox(height: 20),
+                ElevatedButtonComponent(
+                  text: 'Criar uma nova conta',
+                  bgcolor: Color(0xFFFF7D7D),
+                  textColor: Colors.white,
+                  onPressed: () => {},
+                ),
+                SizedBox(height: 20),
+                ElevatedButtonComponent(
+                  text: 'Recuperar conta',
+                  bgcolor: Color(0xFFFFC081),
+                  textColor: Color(0xFF666666),
+                  onPressed: () => {},
+                ),
+              ],
+            ),
           ),
         ),
       ),
